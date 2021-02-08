@@ -1,0 +1,12 @@
+a:after {
+    content: " \bb";
+}
+
+a {
+    display: block;
+    color: #161;
+}
+
+a:visited {
+    color: #387;
+}
