@@ -1,8 +1,13 @@
 package combos
 
 import (
+	"fmt"
+
+	"github.com/danverbraganza/go-mithril"
 	"github.com/danverbraganza/go-mithril/moria"
 	"github.com/gopherjs/gopherjs/js"
+
+	"kickboxing-combo-trainer/welcome"
 )
 
 var m = moria.M
@@ -44,12 +49,16 @@ type Combo struct {
 	Moves []Move
 }
 
-func (c Combo) NewCheckBox() (retval moria.VirtualElement) {
+func (c Combo) NewCheckBox(w *welcome.WelcomePage) (retval moria.VirtualElement) {
+	fmt.Println("CheckBox")
 	return m("li", nil,
 		m("div", nil,
 			m("label[for='combo-"+c.Name+"']", nil, moria.S(c.Name)),
-			m("input#combo-"+c.Name, js.M{"type": "checkbox"}),
-		),
+			m("input#combo-"+c.Name+"[type='checkbox']", js.M{
+				"value": w.combos[c],
+				"onchange": mithril.WithAttr("value", func(value string) {
+				fmt.Println(value);
+			})})),
 		moria.F(func(children *[]moria.View) {
 			for i, move := range c.Moves {
 				*children = append(*children, moria.S(move.LongName))

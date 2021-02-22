@@ -45,7 +45,6 @@ func (r *Round) Start() {
 	go func() {
 		for r.running {
 			<-fps30
-			fmt.Println("hi")
 			now := time.Now()
 			r.timeSpent += now.Sub(r.last)
 			r.last = now
