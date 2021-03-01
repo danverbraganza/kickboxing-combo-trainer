@@ -9,6 +9,8 @@ import (
 	"github.com/danverbraganza/go-mithril"
 	"github.com/danverbraganza/go-mithril/moria"
 	"github.com/gopherjs/gopherjs/js"
+
+	"kickboxing-combo-trainer/combos"
 )
 
 type Round struct {
@@ -16,6 +18,7 @@ type Round struct {
 	Duration, timeSpent time.Duration
 	last                time.Time
 	running             bool
+	SelectedCombos      []combos.Combo
 }
 
 var m = moria.M

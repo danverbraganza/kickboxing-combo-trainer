@@ -1,6 +1,7 @@
 package welcome
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -18,12 +19,30 @@ type WelcomePage struct {
 	Duration time.Duration
 }
 
+func NewWelcomePage() *WelcomePage {
+	return &WelcomePage{
+		combos: map[string]bool{},
+	}
+}
+
 func (w *WelcomePage) Controller() moria.Controller {
 	return w
 }
 
+func (w *WelcomePage) SelectedCombosAsString() string {
+	selectedCombos := []string{}
+	for combo, selected := range w.combos {
+		if selected {
+			selectedCombos = append(selectedCombos, combo)
+		}
+
+	}
+	return strings.Join(selectedCombos, ",")
+}
+
 func (*WelcomePage) View(x moria.Controller) moria.View {
 	w := x.(*WelcomePage)
+
 	return m("div#wrapper", nil,
 		m("h1", nil, moria.S("Kickboxing Combo Trainer")),
 		// Add more components here
@@ -40,13 +59,22 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 			m("button", js.M{
 				"config": mithril.RouteConfig,
 				"onclick": func() {
+					fmt.Println(
+						strings.Join([]string{
+							"",
+							"round",
+							w.Duration.String(),
+						},
+							"/") + "/selectedCombos=" + w.SelectedCombosAsString())
+
 					mithril.RouteRedirect(
 						strings.Join([]string{
 							"",
 							"round",
 							w.Duration.String(),
 						},
-							"/"),
+							"/")+"/selectedCombos="+w.SelectedCombosAsString(),
+
 						js.M{},
 						false,
 					)

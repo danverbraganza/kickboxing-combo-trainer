@@ -11,14 +11,14 @@ import (
 var m = moria.M
 
 func main() {
-	welcomePage := &welcome.WelcomePage{}
+	welcomePage := welcome.NewWelcomePage()
 	activeRound := &round.Round{}
 
 	moria.Route(
 		dom.GetWindow().Document().QuerySelector("body"), "/",
 		map[string]moria.Component{
 			"/":                welcomePage,
-			"/round/:duration": activeRound,
+			"/round/:duration/selectedCombos=:selectedCombos": activeRound,
 		})
 
 }

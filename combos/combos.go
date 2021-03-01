@@ -52,6 +52,7 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 			m("input#combo-"+c.Name+"[type='checkbox']", js.M{
 				"checked": selectedCombos[c.Name],
 				"onchange": mithril.WithAttr("checked", func(checked bool) {
+					selectedCombos[c.Name] = checked
 			})})),
 		moria.F(func(children *[]moria.View) {
 			for i, move := range c.Moves {
