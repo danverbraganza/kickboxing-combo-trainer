@@ -11,8 +11,10 @@ import (
 	"kickboxing-combo-trainer/combos"
 )
 
+var m = moria.M
+
 type WelcomePage struct {
-	combos   map[Combo]bool
+	combos   map[string]bool
 	Duration time.Duration
 }
 
@@ -29,7 +31,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 		m("ul", nil,
 			moria.F(func(children *[]moria.View) {
 				for _, combo := range combos.List {
-					*children = append(*children, combo.NewCheckBox(w))
+					*children = append(*children, combo.NewCheckBox(w.combos))
 				}
 			},
 			),

@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/danverbraganza/go-mithril/moria"
-	"github.com/gopherjs/gopherjs/js"
 	"honnef.co/go/js/dom"
 
 	"kickboxing-combo-trainer/round"
