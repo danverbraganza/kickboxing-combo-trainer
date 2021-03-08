@@ -1,7 +1,6 @@
 package welcome
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
@@ -22,6 +21,7 @@ type WelcomePage struct {
 func NewWelcomePage() *WelcomePage {
 	return &WelcomePage{
 		combos: map[string]bool{},
+		Duration: 2 * time.Minute,
 	}
 }
 
@@ -59,14 +59,6 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 			m("button", js.M{
 				"config": mithril.RouteConfig,
 				"onclick": func() {
-					fmt.Println(
-						strings.Join([]string{
-							"",
-							"round",
-							w.Duration.String(),
-						},
-							"/") + "/selectedCombos=" + w.SelectedCombosAsString())
-
 					mithril.RouteRedirect(
 						strings.Join([]string{
 							"",

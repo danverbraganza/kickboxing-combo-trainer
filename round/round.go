@@ -3,6 +3,8 @@ package round
 import (
 	"fmt"
 	"math"
+	"math/rand"
+	"strings"
 	"sync"
 	"time"
 
@@ -12,6 +14,10 @@ import (
 
 	"kickboxing-combo-trainer/combos"
 )
+
+func Init() {
+	rand.Seed(time.Now().Unix())
+}
 
 type Round struct {
 	sync.Mutex
@@ -26,17 +32,44 @@ var m = moria.M
 type s = moria.S
 
 var (
-	fps30 = time.Tick(time.Second / 30)
+	fps30       = time.Tick(time.Second / 30)
+	DisplayChan = make(chan string)
+	beatTick = time.Tick(800 * time.Millisecond)
+	runningBeatTick = make(chan time.Time)
 )
+
+func ExtractCombos(rawComboString string) (sc []combos.Combo) {
+	comboKeys := strings.Split(rawComboString, ",")
+	for _, comboKey := range comboKeys {
+		sc = append(sc, combos.ByName(comboKey))
+	}
+	return
+}
 
 func (r *Round) Controller() moria.Controller {
 	r.Duration, _ = time.ParseDuration(
 		mithril.RouteParam("duration").(string),
 	)
 
+	r.SelectedCombos = ExtractCombos(mithril.RouteParam("selectedCombos").(string))
+
+	go func() {
+		for {
+			// Pick a combo
+			comboTimer := r.RandomCombo().NewChannel(runningBeatTick)
+			for newStr := range(comboTimer) {
+				DisplayChan <- newStr
+			}
+		}
+	}()
+
 	r.timeSpent = 0 * time.Second
 	r.Start()
 	return r
+}
+
+func (r *Round) RandomCombo() combos.Combo {
+	return r.SelectedCombos[rand.Intn(len(r.SelectedCombos))]
 }
 
 func (r *Round) Start() {
@@ -52,6 +85,11 @@ func (r *Round) Start() {
 			r.timeSpent += now.Sub(r.last)
 			r.last = now
 			mithril.Redraw(false)
+			select {
+			case x:= <- beatTick:
+				runningBeatTick <- x
+			default:
+			}
 		}
 		// Reroute back to main page
 	}()
@@ -109,5 +147,6 @@ func (*Round) View(x moria.Controller) moria.View {
 			},
 		},
 			s("\u25a0")),
+		m("div#move", nil, moria.S(fmt.Sprintf("%v", <-DisplayChan))),
 	)
 }

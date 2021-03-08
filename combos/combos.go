@@ -1,6 +1,8 @@
 package combos
 
 import (
+	"time"
+
 	"github.com/danverbraganza/go-mithril"
 	"github.com/danverbraganza/go-mithril/moria"
 	"github.com/gopherjs/gopherjs/js"
@@ -66,10 +68,49 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 	)
 }
 
+
+// Returns a channel that you can watch to get the current state
+func (c Combo) NewChannel(beatTick chan time.Time) (retval chan string) {
+	currentString := "Combo: " + c.Name
+	// Pause on the move intro for twice the beats.
+	moveIndex := -2
+	retval = make(chan string)
+	go func() {
+		for {
+			select {
+			case <- beatTick:
+				moveIndex++
+				if moveIndex < 0 {
+					// Do nothing
+				} else if moveIndex < len(c.Moves) {
+					currentString = "Move: " + c.Moves[moveIndex].LongName
+				} else {
+					close(retval)
+					return
+				}
+			default:
+				retval <- currentString
+			}
+		}
+	}()
+	return retval
+}
+
 var List = []Combo{
 	{"1", FromNames("1")},
+	{"JabJab", FromNames("1", "1")},
 	{"2", FromNames("1", "2")},
 	{"3", FromNames("1", "2", "3")},
 	{"4", FromNames("1", "2", "3", "2")},
 	{"5", FromNames("1", "2", "5", "2", "3")},
+}
+
+// TODO: Dictionary lookup
+func ByName(name string) Combo {
+	for _, combo := range List {
+		if combo.Name  == name  {
+			return combo
+		}
+	}
+	return List[0]
 }
