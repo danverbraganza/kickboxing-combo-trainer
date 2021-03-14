@@ -55,30 +55,30 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 				"checked": selectedCombos[c.Name],
 				"onchange": mithril.WithAttr("checked", func(checked bool) {
 					selectedCombos[c.Name] = checked
-			})})),
+				})})),
 		moria.F(func(children *[]moria.View) {
 			for i, move := range c.Moves {
 				*children = append(*children, moria.S(move.LongName))
-				if i < len(c.Moves) - 1 {
+				if i < len(c.Moves)-1 {
 					*children = append(*children, moria.S(", "))
-}
+				}
 			}
 			return
 		}),
 	)
 }
 
-
 // Returns a channel that you can watch to get the current state
-func (c Combo) NewChannel(beatTick chan time.Time) (retval chan string) {
+func (c Combo) NewChannel(beatTick chan time.Time) (retval chan moria.VirtualElement) {
 	currentString := "Combo: " + c.Name
 	// Pause on the move intro for twice the beats.
 	moveIndex := -2
-	retval = make(chan string)
+	retval = make(chan moria.VirtualElement)
 	go func() {
 		for {
 			select {
-			case <- beatTick:
+			case <-beatTick:
+				print("Read on beatTick")
 				moveIndex++
 				if moveIndex < 0 {
 					// Do nothing
@@ -89,7 +89,7 @@ func (c Combo) NewChannel(beatTick chan time.Time) (retval chan string) {
 					return
 				}
 			default:
-				retval <- currentString
+				retval <- m("div#move", nil, moria.S(currentString))
 			}
 		}
 	}()
@@ -108,7 +108,7 @@ var List = []Combo{
 // TODO: Dictionary lookup
 func ByName(name string) Combo {
 	for _, combo := range List {
-		if combo.Name  == name  {
+		if combo.Name == name {
 			return combo
 		}
 	}

@@ -21,7 +21,7 @@ type WelcomePage struct {
 func NewWelcomePage() *WelcomePage {
 	return &WelcomePage{
 		combos: map[string]bool{},
-		Duration: 2 * time.Minute,
+		Duration: 180 * time.Second,
 	}
 }
 

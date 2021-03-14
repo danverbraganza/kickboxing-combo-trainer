@@ -24,6 +24,7 @@ type Round struct {
 	Duration, timeSpent time.Duration
 	last                time.Time
 	running             bool
+	cleared             bool
 	SelectedCombos      []combos.Combo
 }
 
@@ -32,9 +33,9 @@ var m = moria.M
 type s = moria.S
 
 var (
-	fps30       = time.Tick(time.Second / 30)
-	DisplayChan = make(chan string)
-	beatTick = time.Tick(800 * time.Millisecond)
+	fps30           = time.Tick(time.Second / 30)
+	DisplayChan     = make(chan moria.VirtualElement)
+	beatTick        = time.Tick(800 * time.Millisecond)
 	runningBeatTick = make(chan time.Time)
 )
 
@@ -54,11 +55,11 @@ func (r *Round) Controller() moria.Controller {
 	r.SelectedCombos = ExtractCombos(mithril.RouteParam("selectedCombos").(string))
 
 	go func() {
-		for {
+		for !r.cleared {
 			// Pick a combo
 			comboTimer := r.RandomCombo().NewChannel(runningBeatTick)
-			for newStr := range(comboTimer) {
-				DisplayChan <- newStr
+			for innerElement := range comboTimer {
+				DisplayChan <- innerElement
 			}
 		}
 	}()
@@ -79,16 +80,17 @@ func (r *Round) Start() {
 	r.running = true
 
 	go func() {
-		for r.running {
+		for r.running && r.timeSpent <= r.Duration {
 			<-fps30
 			now := time.Now()
 			r.timeSpent += now.Sub(r.last)
 			r.last = now
 			mithril.Redraw(false)
 			select {
-			case x:= <- beatTick:
+			case x := <-beatTick:
 				runningBeatTick <- x
 			default:
+				print("default")
 			}
 		}
 		// Reroute back to main page
@@ -99,13 +101,14 @@ func (r *Round) Stop() {
 	r.Lock()
 	defer r.Unlock()
 	r.running = false
+	r.cleared = true
 }
 
 func FormatDuration(d time.Duration) string {
-	return fmt.Sprintf("%02d:%02d:%03d",
+	return fmt.Sprintf("%02d:%02d",
 		int(math.Abs(d.Minutes()))%60,
 		int(math.Abs(d.Seconds()))%60,
-		int(math.Abs(float64(d.Nanoseconds()/1e6)))%1000)
+	)
 }
 
 func (*Round) View(x moria.Controller) moria.View {
@@ -147,6 +150,6 @@ func (*Round) View(x moria.Controller) moria.View {
 			},
 		},
 			s("\u25a0")),
-		m("div#move", nil, moria.S(fmt.Sprintf("%v", <-DisplayChan))),
+		m("div#move", nil, <-DisplayChan),
 	)
 }
