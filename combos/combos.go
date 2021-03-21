@@ -78,11 +78,11 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 }
 
 // Returns a channel that you can watch to get the current state
-func (c Combo) NewChannel(beatTick chan time.Time) (retval chan moria.VirtualElement) {
+func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.VirtualElement) {
 	currentString := [2]string{"combo", c.Name}
 	// Pause on the move intro for twice the beats.
 	moveIndex := -2
-	retval = make(chan moria.VirtualElement)
+	displayChan = make(chan moria.VirtualElement)
 	go func() {
 		for {
 			select {
@@ -94,15 +94,16 @@ func (c Combo) NewChannel(beatTick chan time.Time) (retval chan moria.VirtualEle
 				} else if moveIndex < len(c.Moves) {
 					currentString = [2]string{"move", c.Moves[moveIndex].LongName}
 				} else {
-					close(retval)
+					print("closing displayChan")
+					close(displayChan)
 					return
 				}
 			default:
-				retval <- m("div#" + currentString[0], nil, moria.S(currentString[1]))
+				displayChan <- m("div#" + currentString[0], nil, moria.S(currentString[1]))
 			}
 		}
 	}()
-	return retval
+	return displayChan
 }
 
 var List = []Combo{

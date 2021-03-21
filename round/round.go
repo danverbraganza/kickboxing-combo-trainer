@@ -61,7 +61,9 @@ func (r *Round) Controller() moria.Controller {
 			for innerElement := range comboTimer {
 				DisplayChan <- innerElement
 			}
+			print("next move")
 		}
+		print("R cleared")
 	}()
 
 	r.timeSpent = 0 * time.Second
@@ -96,12 +98,19 @@ func (r *Round) Start() {
 	}()
 }
 
+func (r *Round) Pause() {
+	r.Lock()
+	defer r.Unlock()
+	r.running = false
+}
+
 func (r *Round) Stop() {
 	r.Lock()
 	defer r.Unlock()
 	r.running = false
 	r.cleared = true
 }
+
 
 func FormatDuration(d time.Duration) string {
 	return fmt.Sprintf("%02d:%02d",
@@ -124,15 +133,11 @@ func (*Round) View(x moria.Controller) moria.View {
 		m("input#time-left", js.M{
 			"value": FormatDuration(r.Duration - r.timeSpent),
 		}),
-		moria.F(func(children *[]moria.View) {
-			// When a combo is introduced, we want two beats of
-			// intro, and then one beat for each move.
-		}),
 		m("button#pause.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {
 				if r.running {
-					go r.Stop()
+					go r.Pause()
 				} else {
 					go r.Start()
 				}
