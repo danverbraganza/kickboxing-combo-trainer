@@ -46,7 +46,6 @@ div#header {
     padding: 10px;
 }
 
-
 div#trainer {
     max-width: fill;
     max-height: fill;
@@ -81,6 +80,10 @@ label {
     font-height: 14
 }
 
+.control {
+    min-height: 30px;
+    min-width: 30px;
+}
 
 input {
     float: right;

@@ -113,8 +113,10 @@ func FormatDuration(d time.Duration) string {
 func (*Round) View(x moria.Controller) moria.View {
 	r := x.(*Round)
 
+	// Display pause button
 	pauseSigil := s("\u23F8")
 	if !r.running {
+		// Display play button
 		pauseSigil = s("\u25B6")
 	}
 
@@ -130,16 +132,16 @@ func (*Round) View(x moria.Controller) moria.View {
 			"config": mithril.RouteConfig,
 			"onclick": func() {
 				if r.running {
-					r.Stop()
+					go r.Stop()
 				} else {
-					r.Start()
+					go r.Start()
 				}
 			},
 		}, pauseSigil),
 		m("button#stop.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {
-				r.Stop()
+				go r.Stop()
 				mithril.RouteRedirect(
 					"/",
 					js.M{},
