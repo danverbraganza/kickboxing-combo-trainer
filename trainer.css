@@ -8,7 +8,6 @@
     background: goldenrod;
     font-style: italic;
     padding: 10px;
-
     text-align: justify;
 }
 
@@ -21,11 +20,11 @@ body,html {
 }
 
 .combo-container {
-   display: flex;
-   flex-direction: row;
-   max-width: 800px;
-   flex-wrap: wrap;
-   justify-content: space-evenly;
+    display: flex;
+    flex-direction: row;
+    max-width: 800px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 #wrapper {
@@ -53,8 +52,14 @@ div#trainer {
     min-height: fill;
 }
 
+div#options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
 div#combo, div#move {
-    background: yellow;
     font-size: 72px;
     font-weight: bold;
     font-family: Impact, sans;
