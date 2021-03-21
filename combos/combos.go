@@ -27,7 +27,9 @@ var Moves = []Move{
 	{"9", "Jab Body"},
 	{"10", "Cross Body"},
 	{"L", "Lead lead Kick"},
-	{"B", "Back leg Kick"},
+	{"R", "Rear leg Kick"},
+	{"V", "Liver Shot"},
+	{"S", "Spleen Shot"},
 }
 
 func FromNames(names ...string) (moves []Move) {
@@ -108,15 +110,17 @@ func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.Virtu
 
 var List = []Combo{
 	{"1", FromNames("1")},
-	{"Double Jab", FromNames("1", "1")},
+	{"1-1", FromNames("1", "1")},
 	{"2", FromNames("1", "2")},
 	{"3", FromNames("1", "2", "3")},
 	{"4", FromNames("1", "2", "3", "2")},
 	{"5", FromNames("1", "2", "5", "2", "3")},
-	{"Lead go-around", FromNames("3", "6", "4", "5")},
-	{"Rear go-around", FromNames("4", "5", "6", "3")},
-	{"A", FromNames("L", "2", "3", "B")},
-	{"B", FromNames("B", "3", "2", "L")},
+	{"Liver go-around", FromNames("V", "9", "8", "S")},
+	{"Spleen go-around", FromNames("S", "8", "9", "V")},
+	{"A", FromNames("9", "2", "3")},
+	{"B", FromNames("10", "3", "2")},
+	{"X", FromNames("L", "2", "3", "R")},
+	{"Y", FromNames("R", "3", "2", "L")},
 }
 
 // TODO: Dictionary lookup
