@@ -90,7 +90,6 @@ func (r *Round) Start() {
 			case x := <-beatTick:
 				runningBeatTick <- x
 			default:
-				print("default")
 			}
 		}
 		// Reroute back to main page
@@ -119,8 +118,7 @@ func (*Round) View(x moria.Controller) moria.View {
 		pauseSigil = s("\u25B6")
 	}
 
-	return m("div#wrapper", nil,
-		m("h1", nil, moria.S("Kickboxing Combo Trainer")),
+	return m("div", nil,
 		m("input#time-left", js.M{
 			"value": FormatDuration(r.Duration - r.timeSpent),
 		}),

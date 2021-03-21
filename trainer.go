@@ -15,7 +15,7 @@ func main() {
 	activeRound := &round.Round{}
 
 	moria.Route(
-		dom.GetWindow().Document().QuerySelector("body"), "/",
+		dom.GetWindow().Document().QuerySelector("div#trainer"), "/",
 		map[string]moria.Component{
 			"/":                welcomePage,
 			"/round/:duration/selectedCombos=:selectedCombos": activeRound,

@@ -20,7 +20,7 @@ type WelcomePage struct {
 
 func NewWelcomePage() *WelcomePage {
 	return &WelcomePage{
-		combos: map[string]bool{},
+		combos:   map[string]bool{},
 		Duration: 180 * time.Second,
 	}
 }
@@ -44,18 +44,25 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 	w := x.(*WelcomePage)
 
 	return m("div#wrapper", nil,
-		m("h1", nil, moria.S("Kickboxing Combo Trainer")),
 		// Add more components here
-		m("div#disclaimer", nil, moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that you cannot hold the developer of this app responsible for any injuries.")),
-		m("ul", nil,
-			moria.F(func(children *[]moria.View) {
-				for _, combo := range combos.List {
-					*children = append(*children, combo.NewCheckBox(w.combos))
-				}
-			},
-			),
-		),
+		m("div#disclaimer", nil, moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that this is app is not responsible for any injuries.")),
 		m("div", nil,
+			m("select#select-duration", nil,
+				moria.F(func(children *[]moria.View) {
+					for _, duration := range []string{"1m", "2m", "3m"} {
+						*children = append(*children, m("option[value='"+duration+"']", nil, moria.S(duration)))
+					}
+				},
+				),
+			),
+			m("select#select-speed", nil,
+				moria.F(func(children *[]moria.View) {
+					for _, speed := range []string{"slow", "medium", "fast"} {
+						*children = append(*children, m("option[value='"+speed+"']", nil, moria.S(speed)))
+					}
+				},
+				),
+			),
 			m("button", js.M{
 				"config": mithril.RouteConfig,
 				"onclick": func() {
@@ -72,6 +79,15 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 					)
 				}},
 				moria.S("Go!"),
+			),
+		),
+
+		m("div.combo-container", nil,
+			moria.F(func(children *[]moria.View) {
+				for _, combo := range combos.List {
+					*children = append(*children, combo.NewCheckBox(w.combos))
+				}
+			},
 			),
 		),
 	)

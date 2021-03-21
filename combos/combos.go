@@ -6,6 +6,7 @@ import (
 	"github.com/danverbraganza/go-mithril"
 	"github.com/danverbraganza/go-mithril/moria"
 	"github.com/gopherjs/gopherjs/js"
+	"honnef.co/go/js/dom"
 )
 
 var m = moria.M
@@ -25,6 +26,8 @@ var Moves = []Move{
 	{"8", "Read Hook Body"},
 	{"9", "Jab Body"},
 	{"10", "Cross Body"},
+	{"L", "Lead lead Kick"},
+	{"B", "Back leg Kick"},
 }
 
 func FromNames(names ...string) (moves []Move) {
@@ -48,29 +51,35 @@ type Combo struct {
 }
 
 func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.VirtualElement) {
-	return m("li", nil,
-		m("div", nil,
-			m("label[for='combo-"+c.Name+"']", nil, moria.S(c.Name)),
-			m("input#combo-"+c.Name+"[type='checkbox']", js.M{
-				"checked": selectedCombos[c.Name],
-				"onchange": mithril.WithAttr("checked", func(checked bool) {
-					selectedCombos[c.Name] = checked
-				})})),
+	return m("div.combo-picker", js.M{
+		"onclick": func() {
+			d := dom.GetWindow().Document()
+			d.GetElementByID("combo-" + c.Name).(*dom.HTMLInputElement).Click()
+		},
+	},
+		m("label[for='combo-"+c.Name+"']", nil,
+			moria.S(c.Name)),
+		m("input#combo-"+c.Name+"[type='checkbox']", js.M{
+			"checked": selectedCombos[c.Name],
+			"onchange": mithril.WithAttr("checked", func(checked bool) {
+				selectedCombos[c.Name] = checked
+			})},
+		),
+		m("br", nil),
 		moria.F(func(children *[]moria.View) {
 			for i, move := range c.Moves {
 				*children = append(*children, moria.S(move.LongName))
 				if i < len(c.Moves)-1 {
-					*children = append(*children, moria.S(", "))
+					*children = append(*children, m("br", nil))
 				}
 			}
 			return
-		}),
-	)
+		}))
 }
 
 // Returns a channel that you can watch to get the current state
 func (c Combo) NewChannel(beatTick chan time.Time) (retval chan moria.VirtualElement) {
-	currentString := "Combo: " + c.Name
+	currentString := [2]string{"combo", c.Name}
 	// Pause on the move intro for twice the beats.
 	moveIndex := -2
 	retval = make(chan moria.VirtualElement)
@@ -83,13 +92,13 @@ func (c Combo) NewChannel(beatTick chan time.Time) (retval chan moria.VirtualEle
 				if moveIndex < 0 {
 					// Do nothing
 				} else if moveIndex < len(c.Moves) {
-					currentString = "Move: " + c.Moves[moveIndex].LongName
+					currentString = [2]string{"move", c.Moves[moveIndex].LongName}
 				} else {
 					close(retval)
 					return
 				}
 			default:
-				retval <- m("div#move", nil, moria.S(currentString))
+				retval <- m("div#" + currentString[0], nil, moria.S(currentString[1]))
 			}
 		}
 	}()
@@ -98,11 +107,15 @@ func (c Combo) NewChannel(beatTick chan time.Time) (retval chan moria.VirtualEle
 
 var List = []Combo{
 	{"1", FromNames("1")},
-	{"JabJab", FromNames("1", "1")},
+	{"Double Jab", FromNames("1", "1")},
 	{"2", FromNames("1", "2")},
 	{"3", FromNames("1", "2", "3")},
 	{"4", FromNames("1", "2", "3", "2")},
 	{"5", FromNames("1", "2", "5", "2", "3")},
+	{"Lead go-around", FromNames("3", "6", "4", "5")},
+	{"Rear go-around", FromNames("4", "5", "6", "3")},
+	{"A", FromNames("L", "2", "3", "B")},
+	{"B", FromNames("B", "3", "2", "L")},
 }
 
 // TODO: Dictionary lookup
