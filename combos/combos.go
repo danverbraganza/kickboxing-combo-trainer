@@ -1,6 +1,7 @@
 package combos
 
 import (
+	"strings"
 	"time"
 
 	"github.com/danverbraganza/go-mithril"
@@ -13,24 +14,31 @@ var m = moria.M
 
 type Move struct {
 	ShortName, LongName string
+	IsLeadSide          bool
 }
 
 var Moves = []Move{
-	{"1", "Jab"},
-	{"2", "Cross"},
-	{"3", "Lead Hook"},
-	{"4", "Rear Hook"},
-	{"5", "Lead Uppercut"},
-	{"6", "Rear Uppercut"},
-	{"7", "Lead Hook Body"},
-	{"8", "Read Hook Body"},
-	{"9", "Jab Body"},
-	{"10", "Cross Body"},
-	{"L", "Lead lead Kick"},
-	{"R", "Rear leg Kick"},
-	{"V", "Liver Shot"},
-	{"S", "Spleen Shot"},
+	{"1", "Jab", true},
+	{"2", "Cross", false},
+	{"3", "Lead Hook", true},
+	{"4", "Rear Hook", false},
+	{"5", "Lead Uppercut", true},
+	{"6", "Rear Uppercut", false},
+	{"1B", "Jab Body", true},
+	{"2B", "Cross Body", false},
+	{"3B", "Lead Hook Body", true},
+	{"4B", "Rear Hook Body", false},
+	{"LK", "Lead Kick", true},
+	{"RK", "Rear leg Kick", false},
+	{"V", "Liver Shot", true},
+	{"S", "Spleen Shot", false},
 }
+
+// Returns true if this move ends with a kick.
+func (m Move) IsKick() bool {
+	return strings.HasSuffix(m.ShortName,"K")
+}
+
 
 func FromNames(names ...string) (moves []Move) {
 	for _, name := range names {
@@ -101,7 +109,7 @@ func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.Virtu
 					return
 				}
 			default:
-				displayChan <- m("div#" + currentString[0], nil, moria.S(currentString[1]))
+				displayChan <- m("div#"+currentString[0], nil, moria.S(currentString[1]))
 			}
 		}
 	}()
@@ -115,12 +123,12 @@ var List = []Combo{
 	{"3", FromNames("1", "2", "3")},
 	{"4", FromNames("1", "2", "3", "2")},
 	{"5", FromNames("1", "2", "5", "2", "3")},
-	{"Liver go-around", FromNames("V", "9", "8", "S")},
-	{"Spleen go-around", FromNames("S", "8", "9", "V")},
-	{"A", FromNames("9", "2", "3")},
-	{"B", FromNames("10", "3", "2")},
-	{"X", FromNames("L", "2", "3", "R")},
-	{"Y", FromNames("R", "3", "2", "L")},
+	{"Liver go-around", FromNames("V", "4B", "3B", "S")},
+	{"Spleen go-around", FromNames("S", "3B", "4B", "V")},
+	{"A", FromNames("1B", "2", "3")},
+	{"B", FromNames("2B", "3", "2")},
+	{"X", FromNames("LK", "2", "3", "RK")},
+	{"Y", FromNames("RK", "3", "2", "LK")},
 }
 
 // TODO: Dictionary lookup
