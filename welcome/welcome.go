@@ -45,7 +45,13 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 
 	return m("div#wrapper", nil,
 		// Add more components here
-		m("div#disclaimer", nil, moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that this is app is not responsible for any injuries.")),
+		m("div#disclaimer", nil,
+			m("input#disclaimer-collapse.toggle[type='checkbox'][checked='true']", nil),
+			m("label#lbl-disclaimer[for='disclaimer-collapse']", nil, moria.S("Disclaimer")),
+			m("div.disclaimer-content", nil,
+				moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that this is app is not responsible for any injuries.")),
+		),
+		// End disclaimer
 		m("div", nil,
 			m("div#options", nil,
 				m("select#select-duration", nil,
