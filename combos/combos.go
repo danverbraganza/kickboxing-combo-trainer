@@ -36,9 +36,8 @@ var Moves = []Move{
 
 // Returns true if this move ends with a kick.
 func (m Move) IsKick() bool {
-	return strings.HasSuffix(m.ShortName,"K")
+	return strings.HasSuffix(m.ShortName, "K")
 }
-
 
 func FromNames(names ...string) (moves []Move) {
 	for _, name := range names {
@@ -87,6 +86,18 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 		}))
 }
 
+func (c Combo) Describe() (retval moria.VirtualElement) {
+	return m(
+		"span.combo-describe", nil,
+		m("span.combo-name", nil, moria.S(c.Name)),
+		moria.F(func(children *[]moria.View) {
+			for _, move := range c.Moves {
+				*children = append(*children, moria.S(move.LongName))
+			}
+			return
+		}))
+}
+
 // Returns a channel that you can watch to get the current state
 func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.VirtualElement) {
 	currentString := [2]string{"combo", c.Name}
@@ -129,6 +140,34 @@ var List = []Combo{
 	{"B", FromNames("2B", "3", "2")},
 	{"X", FromNames("LK", "2", "3", "RK")},
 	{"Y", FromNames("RK", "3", "2", "LK")},
+}
+
+type Round struct {
+	Name   string
+	Combos []Combo
+}
+
+func (r Round) NewRadioButton() (retval moria.VirtualElement) {
+	return m(
+		"div.round-picker",
+		js.M{
+			"onclick": func() {
+				d := dom.GetWindow().Document()
+				d.GetElementByID("round-" + r.Name).(*dom.HTMLInputElement).Click()
+			}},
+		m("label[for='round-"+r.Name+"']", nil, moria.S(r.Name)),
+		m("input#round-"+r.Name+"[type='radio']", nil),
+		m("br", nil),
+		moria.F(func(children *[]moria.View) {
+			for _, combo := range r.Combos {
+				*children = append(*children, combo.Describe())
+			}
+			return
+		}))
+}
+
+var RoundList = []Round{
+	{"Getting Started", []Combo{ByName("1"), ByName("1-1"), ByName("2")}},
 }
 
 // TODO: Dictionary lookup

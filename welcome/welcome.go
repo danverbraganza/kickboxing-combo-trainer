@@ -47,7 +47,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 		// Add more components here
 		m("div#disclaimer", nil,
 			m("input#disclaimer-collapse.toggle[type='checkbox'][checked='true']", nil),
-			m("label#lbl-disclaimer[for='disclaimer-collapse']", nil, moria.S("Disclaimer")),
+			m("label#label-disclaimer[for='disclaimer-collapse']", nil, moria.S("Disclaimer")),
 			m("div.disclaimer-content", nil,
 				moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that this is app is not responsible for any injuries.")),
 		),
@@ -87,6 +87,17 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 					}},
 					moria.S("Go!"),
 				),
+			),
+		),
+
+		m("div.round-container", nil,
+			// TODO: Make collapsible
+			m("div", nil, moria.S("Prebuilt rounds")),
+			moria.F(func(children *[]moria.View) {
+				for _, round := range combos.RoundList {
+					*children = append(*children, round.NewRadioButton())
+				}
+			},
 			),
 		),
 

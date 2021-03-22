@@ -30,20 +30,36 @@ body,html {
     justify-content: space-evenly;
 }
 
+.round-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.combo-describe {
+    border: 1px solid darkblue;
+}
+
+.combo-name {
+    font-weight: bold;
+}
+
 input#disclaimer-collapse {
     display: none;
 }
 
-#lbl-disclaimer:hover {
+#label-disclaimer:hover {
   background-color: #red;
 }
 
-#lbl-disclaimer::before {
+#label-disclaimer::before {
     content: "[+] ";
     font-family: Mono;
 }
 
-#disclaimer-collapse:checked + #lbl-disclaimer::before {
+#disclaimer-collapse:checked + #label-disclaimer::before {
     content: "[-] ";
     font-family: Mono;
 }
@@ -55,7 +71,7 @@ input#disclaimer-collapse {
   transition: max-height .25s ease-in-out;
 }
 
-#disclaimer-collapse:checked + #lbl-disclaimer + .disclaimer-content {
+#disclaimer-collapse:checked + #label-disclaimer + .disclaimer-content {
   max-height: 100vh;
 }
 
