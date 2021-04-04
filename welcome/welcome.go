@@ -92,7 +92,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 
 		m("div.round-container", nil,
 			// TODO: Make collapsible
-			m("div", nil, moria.S("Prebuilt rounds")),
+			m("div.container-title", nil, moria.S("Prebuilt rounds")),
 			moria.F(func(children *[]moria.View) {
 				for _, round := range combos.RoundList {
 					*children = append(*children, round.NewRadioButton())
@@ -102,6 +102,8 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 		),
 
 		m("div.combo-container", nil,
+			// TODO: Make collapsible
+			m("div.container-title", nil, moria.S("Build your own round")),
 			moria.F(func(children *[]moria.View) {
 				for _, combo := range combos.List {
 					*children = append(*children, combo.NewCheckBox(w.combos))

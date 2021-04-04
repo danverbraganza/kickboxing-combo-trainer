@@ -1,4 +1,4 @@
-
+u
 #disclaimer {
     max-width: 600px;
     margin-top: 10px;
@@ -25,25 +25,22 @@ body,html {
 .combo-container {
     display: flex;
     flex-direction: row;
-    max-width: 800px;
+    max-width: 796px;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    margin: 2px;
 }
 
 .round-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 800px;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    max-width: 796px;
+    margin: 2px;
 }
 
-.combo-describe {
-    border: 1px solid darkblue;
-}
-
-.combo-name {
+.container-title {
+    width: 100%;
     font-weight: bold;
+    font-size: 18px;
+    margin-left: 18px;
 }
 
 input#disclaimer-collapse {
@@ -151,4 +148,32 @@ input {
     max-width: 200px;
     min-width: 200px;
     min-height: 100px;
+}
+
+.round-picker {
+    border: 1px solid darkblue;
+    background: skyblue;
+    padding: 8px;
+    margin: 8px;
+}
+
+.combo-describe {
+    border: 1px solid darkblue;
+    margin: 2px;
+    padding: 2px;
+}
+
+.combo-describe:hover > .combo-name {
+    background-color: yellow;
+    display: float;
+}
+
+.combo-name {
+    font-weight: bold;
+    margin: 6px;
+    padding: 2px;
+}
+
+.combo-description {
+    display: none;
 }

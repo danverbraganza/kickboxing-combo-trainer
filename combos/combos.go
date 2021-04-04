@@ -90,12 +90,13 @@ func (c Combo) Describe() (retval moria.VirtualElement) {
 	return m(
 		"span.combo-describe", nil,
 		m("span.combo-name", nil, moria.S(c.Name)),
-		moria.F(func(children *[]moria.View) {
-			for _, move := range c.Moves {
-				*children = append(*children, moria.S(move.LongName))
-			}
-			return
-		}))
+		m("span.combo-description", nil,
+			moria.F(func(children *[]moria.View) {
+				for _, move := range c.Moves {
+					*children = append(*children, moria.S(move.LongName))
+				}
+				return
+			})))
 }
 
 // Returns a channel that you can watch to get the current state
@@ -157,7 +158,6 @@ func (r Round) NewRadioButton() (retval moria.VirtualElement) {
 			}},
 		m("label[for='round-"+r.Name+"']", nil, moria.S(r.Name)),
 		m("input#round-"+r.Name+"[type='radio']", nil),
-		m("br", nil),
 		moria.F(func(children *[]moria.View) {
 			for _, combo := range r.Combos {
 				*children = append(*children, combo.Describe())
@@ -168,6 +168,9 @@ func (r Round) NewRadioButton() (retval moria.VirtualElement) {
 
 var RoundList = []Round{
 	{"Getting Started", []Combo{ByName("1"), ByName("1-1"), ByName("2")}},
+	{"Adding the hook", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3")}},
+	{"Uppercut FTW", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4")}},
+	{"Max hands", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("Liver go-around"), ByName("Spleen go-around")}},
 }
 
 // TODO: Dictionary lookup
