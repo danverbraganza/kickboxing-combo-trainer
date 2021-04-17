@@ -103,7 +103,14 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 
 		m("div.combo-container", nil,
 			// TODO: Make collapsible
-			m("div.container-title", nil, moria.S("Build your own round")),
+			m("div.container-title.round-picker", 		js.M{
+			"onclick": func() {
+				d := dom.GetWindow().Document()
+				d.GetElementByID("round-custom").(*dom.HTMLInputElement).Click()
+,
+				m("label[for='round-custom']", nil, moria.S("Build your own Round")),
+				m("input#round-custom[type='radio'][name='round']", nil),
+			),
 			moria.F(func(children *[]moria.View) {
 				for _, combo := range combos.List {
 					*children = append(*children, combo.NewCheckBox(w.combos))

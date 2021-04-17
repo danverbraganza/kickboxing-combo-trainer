@@ -172,7 +172,7 @@ func (r Round) NewRadioButton() (retval moria.VirtualElement) {
 				d.GetElementByID("round-" + r.Name).(*dom.HTMLInputElement).Click()
 			}},
 		m("label[for='round-"+r.Name+"']", nil, moria.S(r.Name)),
-		m("input#round-"+r.Name+"[type='radio']", nil),
+		m("input#round-"+r.Name+"[type='radio'][name='round']", nil),
 		moria.F(func(children *[]moria.View) {
 			for _, combo := range r.Combos {
 				*children = append(*children, combo.Describe())
