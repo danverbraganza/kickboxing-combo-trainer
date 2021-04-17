@@ -7,6 +7,7 @@ import (
 	"github.com/danverbraganza/go-mithril"
 	"github.com/danverbraganza/go-mithril/moria"
 	"github.com/gopherjs/gopherjs/js"
+	"honnef.co/go/js/dom"
 
 	"kickboxing-combo-trainer/combos"
 )
@@ -14,14 +15,16 @@ import (
 var m = moria.M
 
 type WelcomePage struct {
-	combos   map[string]bool
-	Duration time.Duration
+	combos        map[string]bool
+	selectedRound string
+	Duration      time.Duration
 }
 
 func NewWelcomePage() *WelcomePage {
 	return &WelcomePage{
-		combos:   map[string]bool{},
-		Duration: 180 * time.Second,
+		combos:        map[string]bool{},
+		selectedRound: "",
+		Duration:      180 * time.Second,
 	}
 }
 
@@ -29,7 +32,10 @@ func (w *WelcomePage) Controller() moria.Controller {
 	return w
 }
 
-func (w *WelcomePage) SelectedCombosAsString() string {
+func (w *WelcomePage) RoundCombosAsString() string {
+	// Determine the selected radio button round.
+
+	//
 	selectedCombos := []string{}
 	for combo, selected := range w.combos {
 		if selected {
@@ -71,7 +77,8 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 					),
 				),
 				m("button", js.M{
-					"config": mithril.RouteConfig,
+					"config":   mithril.RouteConfig,
+					"disabled": w.selectedRound == "",
 					"onclick": func() {
 						mithril.RouteRedirect(
 							strings.Join([]string{
@@ -79,7 +86,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 								"round",
 								w.Duration.String(),
 							},
-								"/")+"/selectedCombos="+w.SelectedCombosAsString(),
+								"/")+"/selectedCombos="+w.RoundCombosAsString(),
 
 							js.M{},
 							false,
@@ -95,7 +102,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 			m("div.container-title", nil, moria.S("Prebuilt rounds")),
 			moria.F(func(children *[]moria.View) {
 				for _, round := range combos.RoundList {
-					*children = append(*children, round.NewRadioButton())
+					*children = append(*children, round.NewRadioButton(&w.selectedRound))
 				}
 			},
 			),
@@ -103,14 +110,16 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 
 		m("div.combo-container", nil,
 			// TODO: Make collapsible
-			m("div.container-title.round-picker", 		js.M{
-			"onclick": func() {
-				d := dom.GetWindow().Document()
-				d.GetElementByID("round-custom").(*dom.HTMLInputElement).Click()
-,
+			m("div.container-title.round-picker", js.M{
+				"onclick": func() {
+					d := dom.GetWindow().Document()
+					d.GetElementByID("round-custom").(*dom.HTMLInputElement).Click()
+				}},
 				m("label[for='round-custom']", nil, moria.S("Build your own Round")),
-				m("input#round-custom[type='radio'][name='round']", nil),
-			),
+				m("input#round-custom[type='radio'][name='round']", js.M{
+					"onchange": func() {
+						w.selectedRound = "custom"
+					}})),
 			moria.F(func(children *[]moria.View) {
 				for _, combo := range combos.List {
 					*children = append(*children, combo.NewCheckBox(w.combos))

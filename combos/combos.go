@@ -88,7 +88,7 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 
 // Creates a new combo by joining
 func Join(combos ...Combo) (retval Combo) {
-	names := []string{};
+	names := []string{}
 	for _, combo := range combos {
 		names = append(names, combo.Name)
 		for _, move := range combo.Moves {
@@ -163,7 +163,7 @@ type Round struct {
 	Combos []Combo
 }
 
-func (r Round) NewRadioButton() (retval moria.VirtualElement) {
+func (r Round) NewRadioButton(selectedRound *string) (retval moria.VirtualElement) {
 	return m(
 		"div.round-picker",
 		js.M{
@@ -172,7 +172,11 @@ func (r Round) NewRadioButton() (retval moria.VirtualElement) {
 				d.GetElementByID("round-" + r.Name).(*dom.HTMLInputElement).Click()
 			}},
 		m("label[for='round-"+r.Name+"']", nil, moria.S(r.Name)),
-		m("input#round-"+r.Name+"[type='radio'][name='round']", nil),
+		m("input#round-"+r.Name+"[type='radio'][name='round']", js.M{
+			"onchange": func() {
+				*selectedRound = r.Name
+			}},
+		),
 		moria.F(func(children *[]moria.View) {
 			for _, combo := range r.Combos {
 				*children = append(*children, combo.Describe())
