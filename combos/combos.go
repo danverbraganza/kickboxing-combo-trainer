@@ -86,6 +86,19 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 		}))
 }
 
+// Creates a new combo by joining
+func Join(combos ...Combo) (retval Combo) {
+	names := []string{};
+	for _, combo := range combos {
+		names = append(names, combo.Name)
+		for _, move := range combo.Moves {
+			retval.Moves = append(retval.Moves, move)
+		}
+	}
+	retval.Name = strings.Join(names, "+")
+	return
+}
+
 func (c Combo) Describe() (retval moria.VirtualElement) {
 	return m(
 		"span.combo-describe", nil,
@@ -135,6 +148,8 @@ var List = []Combo{
 	{"3", FromNames("1", "2", "3")},
 	{"4", FromNames("1", "2", "3", "2")},
 	{"5", FromNames("1", "2", "5", "2", "3")},
+	{"HCH", FromNames("3", "2", "3")},
+	{"CHC", FromNames("2", "3", "2")},
 	{"Liver go-around", FromNames("V", "4B", "3B", "S")},
 	{"Spleen go-around", FromNames("S", "3B", "4B", "V")},
 	{"A", FromNames("1B", "2", "3")},
@@ -169,6 +184,8 @@ func (r Round) NewRadioButton() (retval moria.VirtualElement) {
 var RoundList = []Round{
 	{"Getting Started", []Combo{ByName("1"), ByName("1-1"), ByName("2")}},
 	{"Adding the hook", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3")}},
+	{"Adding the hook II", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC")}},
+	{"Adding the hook III", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC"), Join(ByName("1"), ByName("CHC")), Join(ByName("2"), ByName("HCH")), Join(ByName("3"), ByName("CHC"))}},
 	{"Uppercut FTW", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4")}},
 	{"Max hands", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("Liver go-around"), ByName("Spleen go-around")}},
 }
