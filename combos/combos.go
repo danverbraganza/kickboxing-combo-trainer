@@ -185,6 +185,17 @@ func (r Round) NewRadioButton(selectedRound *string) (retval moria.VirtualElemen
 		}))
 }
 
+
+// Returns a stringified list of the combos.
+func (r Round) CombosAsString() string {
+	combos := []string{}
+	for _, combo := range r.Combos {
+		combos = append(combos, combo.Name)
+	}
+	return strings.Join(combos, ",")
+
+}
+
 var RoundList = []Round{
 	{"Getting Started", []Combo{ByName("1"), ByName("1-1"), ByName("2")}},
 	{"Adding the hook", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3")}},
@@ -202,4 +213,14 @@ func ByName(name string) Combo {
 		}
 	}
 	return List[0]
+}
+
+// TODO: Dictionary lookup
+func RoundByName(name string) Round {
+	for _, round := range RoundList {
+		if round.Name == name {
+			return round
+		}
+	}
+	return RoundList[0]
 }

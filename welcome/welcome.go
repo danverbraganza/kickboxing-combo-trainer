@@ -33,17 +33,20 @@ func (w *WelcomePage) Controller() moria.Controller {
 }
 
 func (w *WelcomePage) RoundCombosAsString() string {
-	// Determine the selected radio button round.
+	if w.selectedRound == "custom" || w.selectedRound == "" {
+		// If there's no selectedRound, this is custom
+		selectedCombos := []string{}
+		for combo, selected := range w.combos {
+			if selected {
+				selectedCombos = append(selectedCombos, combo)
+			}
 
-	//
-	selectedCombos := []string{}
-	for combo, selected := range w.combos {
-		if selected {
-			selectedCombos = append(selectedCombos, combo)
 		}
-
+		return strings.Join(selectedCombos, ",")
+	} else {
+		round := combos.RoundByName(w.selectedRound)
+		return round.CombosAsString()
 	}
-	return strings.Join(selectedCombos, ",")
 }
 
 func (*WelcomePage) View(x moria.Controller) moria.View {
