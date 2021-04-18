@@ -12,7 +12,7 @@ var m = moria.M
 
 func main() {
 	welcomePage := welcome.NewWelcomePage()
-	activeRound := &round.Round{}
+	activeRound := round.NewRound()
 
 	moria.Route(
 		dom.GetWindow().Document().QuerySelector("div#trainer"), "/",

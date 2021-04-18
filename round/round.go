@@ -24,7 +24,7 @@ type Round struct {
 	Duration, timeSpent time.Duration
 	last                time.Time
 	running             bool
-	cleared             bool
+	counter             int
 	SelectedCombos      []combos.Combo
 }
 
@@ -54,11 +54,20 @@ func (r *Round) Controller() moria.Controller {
 
 	r.SelectedCombos = ExtractCombos(mithril.RouteParam("selectedCombos").(string))
 
+	r.timeSpent = 0 * time.Second
+	r.Start()
+	return r
+}
+
+func NewRound() *Round {
+	r := Round{}
 	go func() {
-		for !r.cleared {
+		counter := r.counter
+		for {
 			// Pick a combo
 			comboTimer := r.RandomCombo().NewChannel(runningBeatTick)
 			for innerElement := range comboTimer {
+				print("Writing to display", counter)
 				DisplayChan <- innerElement
 			}
 			print("next move")
@@ -66,9 +75,8 @@ func (r *Round) Controller() moria.Controller {
 		print("R cleared")
 	}()
 
-	r.timeSpent = 0 * time.Second
-	r.Start()
-	return r
+	return &r
+
 }
 
 func (r *Round) RandomCombo() combos.Combo {
@@ -94,7 +102,12 @@ func (r *Round) Start() {
 			default:
 			}
 		}
-		// Reroute back to main page
+		r.counter++
+		mithril.RouteRedirect(
+			"/",
+			js.M{},
+			false,
+		)
 	}()
 }
 
@@ -108,9 +121,8 @@ func (r *Round) Stop() {
 	r.Lock()
 	defer r.Unlock()
 	r.running = false
-	r.cleared = true
+	r.counter++
 }
-
 
 func FormatDuration(d time.Duration) string {
 	return fmt.Sprintf("%02d:%02d",
@@ -146,12 +158,8 @@ func (*Round) View(x moria.Controller) moria.View {
 		m("button#stop.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {
+				print("Stopping")
 				go r.Stop()
-				mithril.RouteRedirect(
-					"/",
-					js.M{},
-					false,
-				)
 			},
 		},
 			s("\u25a0")),

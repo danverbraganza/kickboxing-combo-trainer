@@ -24,7 +24,7 @@ func NewWelcomePage() *WelcomePage {
 	return &WelcomePage{
 		combos:        map[string]bool{},
 		selectedRound: "",
-		Duration:      180 * time.Second,
+		Duration:      5 * time.Second,
 	}
 }
 
