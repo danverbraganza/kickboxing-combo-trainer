@@ -57,7 +57,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 	return m("div#wrapper", nil,
 		// Add more components here
 		m("div#disclaimer", nil,
-			m("input#disclaimer-collapse.toggle[type='checkbox'][checked='true']", nil),
+			m("input#disclaimer-collapse.toggle[type='checkbox']", nil),
 			m("label#label-disclaimer[for='disclaimer-collapse']", nil, moria.S("Disclaimer")),
 			m("div.disclaimer-content", nil,
 				moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that this is app is not responsible for any injuries.")),
@@ -115,33 +115,33 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 		m("div.round-container", nil,
 			// TODO: Make collapsible
 			m("div.container-title", nil, moria.S("Prebuilt rounds")),
+			m("div", nil, moria.S("Pick a round from below! Hover over the name of a combo to see the moves within it")),
 			moria.F(func(children *[]moria.View) {
 				for _, round := range combos.RoundList {
 					*children = append(*children, round.NewRadioButton(&w.selectedRound))
 				}
 			},
 			),
-		),
 
-		m("div.combo-container", nil,
-			// TODO: Make collapsible
-			m("div.container-title.round-picker", js.M{
+			m("div.round-picker", js.M{
 				"onclick": func() {
 					d := dom.GetWindow().Document()
 					d.GetElementByID("round-custom").(*dom.HTMLInputElement).Click()
 				}},
-				m("label[for='round-custom']", nil, moria.S("Build your own Round")),
+				m("label[for='round-custom']", nil, moria.S("Customize your own Round")),
 				m("input#round-custom[type='radio'][name='round']", js.M{
 					"checked": w.selectedRound == "custom",
 					"onchange": func() {
 						w.selectedRound = "custom"
-					}})),
-			moria.F(func(children *[]moria.View) {
-				for _, combo := range combos.List {
-					*children = append(*children, combo.NewCheckBox(w.combos))
-				}
-			},
+					}}),
+				m("div.combo-container", nil,
+
+					moria.F(func(children *[]moria.View) {
+						for _, combo := range combos.List {
+							*children = append(*children, combo.NewCheckBox(w.combos))
+						}
+					},
+					)),
 			),
-		),
-	)
+		))
 }
