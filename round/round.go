@@ -141,6 +141,13 @@ func (*Round) View(x moria.Controller) moria.View {
 		pauseSigil = s("\u25B6")
 	}
 
+	var innerCard moria.VirtualElement
+	select {
+		case innerCard = <-DisplayChan:
+		default:
+		    innerCard = m("div", nil)
+	}
+
 	return m("div", nil,
 		m("input#time-left", js.M{
 			"value": FormatDuration(r.Duration - r.timeSpent),
@@ -163,6 +170,6 @@ func (*Round) View(x moria.Controller) moria.View {
 			},
 		},
 			s("\u25a0")),
-		m("div#move", nil, <-DisplayChan),
+		m("div#move", nil, innerCard),
 	)
 }
