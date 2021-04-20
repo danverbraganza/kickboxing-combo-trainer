@@ -60,10 +60,16 @@ func (r *Round) Controller() moria.Controller {
 }
 
 func NewRound() *Round {
-	r := Round{}
+	r := Round{
+		SelectedCombos: []combos.Combo{},
+	}
 	go func() {
 		counter := r.counter
+		// block here for the beattick to prevent calling randomCombo
+		// with the wrong combo.
+		<- runningBeatTick
 		for {
+			// Wait for a beat
 			// Pick a combo
 			comboTimer := r.RandomCombo().NewChannel(runningBeatTick)
 			for innerElement := range comboTimer {
@@ -74,13 +80,15 @@ func NewRound() *Round {
 		}
 		print("R cleared")
 	}()
-
 	return &r
-
 }
 
 func (r *Round) RandomCombo() combos.Combo {
-	return r.SelectedCombos[rand.Intn(len(r.SelectedCombos))]
+	if (len(r.SelectedCombos) > 0) {
+		return r.SelectedCombos[rand.Intn(len(r.SelectedCombos))]
+	} else {
+		return combos.ByName("1")
+	}
 }
 
 func (r *Round) Start() {

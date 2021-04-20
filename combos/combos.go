@@ -112,9 +112,15 @@ func (c Combo) Describe() (retval moria.VirtualElement) {
 			})))
 }
 
+type DisplayElement struct {
+	Type string
+	Move string
+	Loaded bool
+}
+
 // Returns a channel that you can watch to get the current state
 func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.VirtualElement) {
-	currentString := [2]string{"combo", c.Name}
+	current := DisplayElement{Type: "combo", Move: c.Name}
 	// Pause on the move intro for twice the beats.
 	moveIndex := -2
 	displayChan = make(chan moria.VirtualElement)
@@ -127,14 +133,19 @@ func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.Virtu
 				if moveIndex < 0 {
 					// Do nothing
 				} else if moveIndex < len(c.Moves) {
-					currentString = [2]string{"move", c.Moves[moveIndex].LongName}
+					current = DisplayElement{Type: "move", Move: c.Moves[moveIndex].LongName}
 				} else {
 					print("closing displayChan")
 					close(displayChan)
 					return
 				}
 			default:
-				displayChan <- m("div#"+currentString[0], nil, moria.S(currentString[1]))
+				if !current.Loaded {
+					current.Loaded = true
+					displayChan <- m("div#combo", nil, moria.S("-"))
+				} else {
+					displayChan <- m("div#"+current.Type, nil, moria.S(current.Move))
+				}
 			}
 		}
 	}()
