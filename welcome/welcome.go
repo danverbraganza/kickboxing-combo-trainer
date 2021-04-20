@@ -24,7 +24,7 @@ func NewWelcomePage() *WelcomePage {
 	return &WelcomePage{
 		combos:        map[string]bool{},
 		selectedRound: "",
-		Duration:      5 * time.Second,
+		Duration:      60 * time.Second,
 	}
 }
 
@@ -63,14 +63,18 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 		// End disclaimer
 		m("div", nil,
 			m("div#options", nil,
-				m("select#select-duration", nil,
+				m("select#select-duration",
+					js.M{
+						"onchange": mithril.WithAttr("value", func(value string) {
+							print("changing", value)
+							w.Duration, _ = time.ParseDuration(value)
+						}),
+					},
 					moria.F(func(children *[]moria.View) {
 						for _, duration := range []string{"1m", "2m", "3m"} {
 							*children = append(*children, m("option[value='"+duration+"']", nil, moria.S(duration)))
 						}
-					},
-					),
-				),
+					})),
 				m("select#select-speed", nil,
 					moria.F(func(children *[]moria.View) {
 						for _, speed := range []string{"slow", "medium", "fast"} {
@@ -131,5 +135,4 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 			),
 		),
 	)
-
 }
