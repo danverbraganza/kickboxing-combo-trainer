@@ -105,9 +105,11 @@ func (c Combo) Describe() (retval moria.VirtualElement) {
 		m("span.combo-name", nil, moria.S(c.Name)),
 		m("span.combo-description", nil,
 			moria.F(func(children *[]moria.View) {
+				moveNames := []string{}
 				for _, move := range c.Moves {
-					*children = append(*children, moria.S(move.LongName))
+					moveNames = append(moveNames, move.LongName)
 				}
+				*children = append(*children, moria.S(strings.Join(moveNames, " | ")))
 				return
 			})))
 }
