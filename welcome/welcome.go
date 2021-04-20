@@ -73,14 +73,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 					},
 					moria.F(func(children *[]moria.View) {
 						for _, duration := range []string{"30s", "1m", "2m", "3m"} {
-							selected := ""
-							if strings.HasPrefix(w.Duration.String(), duration) {
-								selected = "[selected]"
-							} else {
-								print(w.Duration.String())
-							}
-
-							*children = append(*children, m("option[value='"+duration+"']"+selected, nil, moria.S(duration)))
+							*children = append(*children, m("option[value='"+duration+"']", js.M{"selected": strings.HasPrefix(w.Duration.String(), duration)}, moria.S(duration)))
 						}
 					})),
 				m("select#select-speed",
@@ -91,11 +84,9 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 					},
 					moria.F(func(children *[]moria.View) {
 						for _, speed := range []string{"slow", "medium", "fast"} {
-							selected := ""
-							if speed == w.Speed {
-								selected = "[selected]"
-							}
-							*children = append(*children, m("option[value='"+speed+"']"+selected, nil, moria.S(speed)))
+							*children = append(*children, m("option[value='"+speed+"']",
+								js.M{"selected": speed == w.Speed},
+								moria.S(speed)))
 						}
 					}),
 				),
