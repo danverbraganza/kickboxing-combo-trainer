@@ -113,8 +113,8 @@ func (c Combo) Describe() (retval moria.VirtualElement) {
 }
 
 type DisplayElement struct {
-	Type string
-	Move string
+	Type   string
+	Move   string
 	Loaded bool
 }
 
@@ -184,6 +184,7 @@ func (r Round) NewRadioButton(selectedRound *string) (retval moria.VirtualElemen
 			}},
 		m("label[for='round-"+r.Name+"']", nil, moria.S(r.Name)),
 		m("input#round-"+r.Name+"[type='radio'][name='round']", js.M{
+			"checked": *selectedRound == r.Name,
 			"onchange": func() {
 				*selectedRound = r.Name
 			}},
@@ -195,7 +196,6 @@ func (r Round) NewRadioButton(selectedRound *string) (retval moria.VirtualElemen
 			return
 		}))
 }
-
 
 // Returns a stringified list of the combos.
 func (r Round) CombosAsString() string {
