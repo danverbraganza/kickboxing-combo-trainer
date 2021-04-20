@@ -1,4 +1,3 @@
-u
 #disclaimer {
     max-width: 600px;
     margin-top: 10px;
@@ -163,9 +162,9 @@ input {
     padding: 2px;
 }
 
-.combo-describe:hover > .combo-name {
+.combo-describe:hover > .combo-name + .combo-description {
     background-color: yellow;
-    display: float;
+    display: inline;
 }
 
 .combo-name {
