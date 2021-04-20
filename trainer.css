@@ -143,11 +143,12 @@ input {
 .combo-picker {
     border: 1px solid darkblue;
     background: skyblue;
-    margin: 5px;
-    padding: 2px;
+    margin: 4px;
+    padding: 6px;
     max-width: 200px;
     min-width: 200px;
     min-height: 100px;
+    border-radius: 4px;
 }
 
 .round-picker {
@@ -155,10 +156,17 @@ input {
     background: skyblue;
     padding: 8px;
     margin: 8px;
+    border-radius: 4px;
+
+}
+
+.round-picker label {
+    padding: 0px 10px 0px 0px;
 }
 
 .combo-describe {
     border: 1px solid darkblue;
+    border-radius: 2px;
     margin: 2px;
     padding: 2px;
 }
