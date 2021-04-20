@@ -132,6 +132,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 				}},
 				m("label[for='round-custom']", nil, moria.S("Build your own Round")),
 				m("input#round-custom[type='radio'][name='round']", js.M{
+					"checked": w.selectedRound == "custom",
 					"onchange": func() {
 						w.selectedRound = "custom"
 					}})),
