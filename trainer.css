@@ -22,24 +22,25 @@ body,html {
 }
 
 .combo-container {
-    display: flex;
+    display: none;
     flex-direction: row;
     max-width: 796px;
     flex-wrap: wrap;
     justify-content: space-evenly;
     margin: 2px;
+    padding: 0px 18px 18px 18px;
 }
 
 .round-container {
     max-width: 796px;
     margin: 2px;
+    padding: 18px;
 }
 
 .container-title {
     width: 100%;
     font-weight: bold;
     font-size: 18px;
-    margin-left: 18px;
 }
 
 input#disclaimer-collapse {
@@ -175,4 +176,8 @@ input {
 
 .combo-description {
     display: none;
+}
+
+#round-custom:checked + div {
+    display: flex;
 }
