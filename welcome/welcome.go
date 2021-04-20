@@ -18,6 +18,7 @@ type WelcomePage struct {
 	combos        map[string]bool
 	selectedRound string
 	Duration      time.Duration
+	Speed         string
 }
 
 func NewWelcomePage() *WelcomePage {
@@ -25,6 +26,7 @@ func NewWelcomePage() *WelcomePage {
 		combos:        map[string]bool{},
 		selectedRound: "",
 		Duration:      60 * time.Second,
+		Speed:         "slow",
 	}
 }
 
@@ -66,22 +68,36 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 				m("select#select-duration",
 					js.M{
 						"onchange": mithril.WithAttr("value", func(value string) {
-							print("changing", value)
 							w.Duration, _ = time.ParseDuration(value)
 						}),
 					},
 					moria.F(func(children *[]moria.View) {
-						for _, duration := range []string{"1m", "2m", "3m"} {
-							*children = append(*children, m("option[value='"+duration+"']", nil, moria.S(duration)))
+						for _, duration := range []string{"30s", "1m", "2m", "3m"} {
+							selected := ""
+							if strings.HasPrefix(w.Duration.String(), duration) {
+								selected = "[selected]"
+							} else {
+								print(w.Duration.String())
+							}
+
+							*children = append(*children, m("option[value='"+duration+"']"+selected, nil, moria.S(duration)))
 						}
 					})),
-				m("select#select-speed", nil,
+				m("select#select-speed",
+					js.M{
+						"onchange": mithril.WithAttr("value", func(value string) {
+							w.Speed = value
+						}),
+					},
 					moria.F(func(children *[]moria.View) {
 						for _, speed := range []string{"slow", "medium", "fast"} {
-							*children = append(*children, m("option[value='"+speed+"']", nil, moria.S(speed)))
+							selected := ""
+							if speed == w.Speed {
+								selected = "[selected]"
+							}
+							*children = append(*children, m("option[value='"+speed+"']"+selected, nil, moria.S(speed)))
 						}
-					},
-					),
+					}),
 				),
 				m("button", js.M{
 					"config":   mithril.RouteConfig,
@@ -92,6 +108,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 								"",
 								"round",
 								w.Duration.String(),
+								w.Speed,
 							},
 								"/")+"/selectedCombos="+w.RoundCombosAsString(),
 

@@ -26,6 +26,7 @@ type Round struct {
 	running             bool
 	counter             int
 	SelectedCombos      []combos.Combo
+	Speed               string
 }
 
 var m = moria.M
@@ -53,6 +54,15 @@ func (r *Round) Controller() moria.Controller {
 	)
 
 	r.SelectedCombos = ExtractCombos(mithril.RouteParam("selectedCombos").(string))
+	r.Speed = (mithril.RouteParam("speed").(string))
+
+	if r.Speed == "slow" {
+		beatTick = time.Tick(800 * time.Millisecond)
+	} else if r.Speed == "medium" {
+		beatTick = time.Tick(600 * time.Millisecond)
+	} else {
+		beatTick = time.Tick(400 * time.Millisecond)
+	}
 
 	r.timeSpent = 0 * time.Second
 	r.Start()
@@ -67,7 +77,7 @@ func NewRound() *Round {
 		counter := r.counter
 		// block here for the beattick to prevent calling randomCombo
 		// with the wrong combo.
-		<- runningBeatTick
+		<-runningBeatTick
 		for {
 			// Wait for a beat
 			// Pick a combo
@@ -84,7 +94,7 @@ func NewRound() *Round {
 }
 
 func (r *Round) RandomCombo() combos.Combo {
-	if (len(r.SelectedCombos) > 0) {
+	if len(r.SelectedCombos) > 0 {
 		return r.SelectedCombos[rand.Intn(len(r.SelectedCombos))]
 	} else {
 		return combos.ByName("1")
@@ -151,9 +161,9 @@ func (*Round) View(x moria.Controller) moria.View {
 
 	var innerCard moria.VirtualElement
 	select {
-		case innerCard = <-DisplayChan:
-		default:
-		    innerCard = m("div", nil)
+	case innerCard = <-DisplayChan:
+	default:
+		innerCard = m("div", nil)
 	}
 
 	return m("div", nil,

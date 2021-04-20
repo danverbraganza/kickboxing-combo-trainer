@@ -18,7 +18,7 @@ func main() {
 		dom.GetWindow().Document().QuerySelector("div#trainer"), "/",
 		map[string]moria.Component{
 			"/":                welcomePage,
-			"/round/:duration/selectedCombos=:selectedCombos": activeRound,
+			"/round/:duration/:speed/selectedCombos=:selectedCombos": activeRound,
 		})
 
 }
