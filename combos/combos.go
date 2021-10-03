@@ -161,6 +161,8 @@ var List = []Combo{
 	{"3", FromNames("1", "2", "3")},
 	{"4", FromNames("1", "2", "3", "2")},
 	{"5", FromNames("1", "2", "5", "2", "3")},
+	{"3U", FromNames("1", "2", "3", "6")},
+	{"4U", FromNames("1", "2", "3", "4","5")},
 	{"HCH", FromNames("3", "2", "3")},
 	{"CHC", FromNames("2", "3", "2")},
 	{"Liver go-around", FromNames("V", "4B", "3B", "S")},
@@ -214,7 +216,7 @@ var RoundList = []Round{
 	{"Adding the hook", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3")}},
 	{"Adding the hook II", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC")}},
 	{"Adding the hook III", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC"), Join(ByName("1"), ByName("CHC")), Join(ByName("2"), ByName("HCH")), Join(ByName("3"), ByName("CHC"))}},
-	{"Uppercut FTW", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4")}},
+	{"Uppercut FTW", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("3U"), ByName("4U")}},
 	{"Max hands", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("Liver go-around"), ByName("Spleen go-around")}},
 }
 
