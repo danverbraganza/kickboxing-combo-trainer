@@ -55,14 +55,8 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 	w := x.(*WelcomePage)
 
 	return m("div#wrapper", nil,
+		m("div#subtitle", nil, moria.S("You can pick a prebuilt round from below or build a custom round by picking individual combos. You can then modify the duration and intensity of the round.")),
 		// Add more components here
-		m("div#disclaimer", nil,
-			m("input#disclaimer-collapse.toggle[type='checkbox']", nil),
-			m("label#label-disclaimer[for='disclaimer-collapse']", nil, moria.S("Disclaimer")),
-			m("div.disclaimer-content", nil,
-				moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that this is app is not responsible for any injuries.")),
-		),
-		// End disclaimer
 		m("div", nil,
 			m("div#options", nil,
 				m("select#select-duration",
@@ -90,7 +84,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 						}
 					}),
 				),
-				m("button", js.M{
+				m("button#go", js.M{
 					"config":   mithril.RouteConfig,
 					"disabled": w.selectedRound == "",
 					"onclick": func() {
@@ -107,15 +101,14 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 							false,
 						)
 					}},
-					moria.S("Go!"),
+					moria.S("Begin Round"),
 				),
 			),
 		),
 
 		m("div.round-container", nil,
 			// TODO: Make collapsible
-			m("div.container-title", nil, moria.S("Prebuilt rounds")),
-			m("div", nil, moria.S("Pick a round from below! Hover over the name of a combo to see the moves within it")),
+			m("div.container-title", nil, moria.S("Rounds")),
 			moria.F(func(children *[]moria.View) {
 				for _, round := range combos.RoundList {
 					*children = append(*children, round.NewRadioButton(&w.selectedRound))
@@ -143,5 +136,13 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 					},
 					)),
 			),
-		))
+		),
+		m("div#disclaimer", nil,
+			m("input#disclaimer-collapse.toggle[type='checkbox']", nil),
+			m("label#label-disclaimer[for='disclaimer-collapse']", nil, moria.S("Disclaimer")),
+			m("div.disclaimer-content", nil,
+				moria.S("Exercising is good for you! However, every individual is unique. By continuing to use this application, you recognize that you are taking full responsibility for the consequences. Make sure to check with your doctor before using this app if you need to. You agree that this is app is not responsible for any injuries.")),
+		),
+		// End disclaimer
+)
 }

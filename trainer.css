@@ -13,12 +13,24 @@
     font-style: italic;
 }
 
+#subtitle {
+    margin: 10px;
+    border: solid 1px darkblue;
+    padding: 8px;
+
+}
+
 body,html {
     min-width: 120px;
     font-family: sans-serif;
     height: 100%;
     margin:  0px auto;
     background: #222222;
+}
+
+button#go {
+    border-radius: 5px;
+    padding: 4px;
 }
 
 .combo-container {
@@ -178,8 +190,8 @@ input {
 
 .combo-name {
     font-weight: bold;
-    margin: 6px;
-    padding: 2px;
+    margin: 20px 12px 20px 20px;
+    padding: 6px;
 }
 
 .combo-description {
