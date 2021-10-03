@@ -169,7 +169,9 @@ input {
     padding: 8px;
     margin: 8px;
     border-radius: 4px;
-
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .round-picker label {
@@ -181,6 +183,7 @@ input {
     border-radius: 2px;
     margin: 2px;
     padding: 2px;
+    display: block;
 }
 
 .combo-describe:hover > .combo-name + .combo-description {

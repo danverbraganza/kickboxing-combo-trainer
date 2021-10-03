@@ -101,7 +101,7 @@ func Join(combos ...Combo) (retval Combo) {
 
 func (c Combo) Describe() (retval moria.VirtualElement) {
 	return m(
-		"span.combo-describe", nil,
+		"div.combo-describe", nil,
 		m("span.combo-name", nil, moria.S(c.Name)),
 		m("span.combo-description", nil,
 			moria.F(func(children *[]moria.View) {
