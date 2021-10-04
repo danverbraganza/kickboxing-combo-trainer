@@ -72,7 +72,12 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 			"checked": selectedCombos[c.Name],
 			"onchange": mithril.WithAttr("checked", func(checked bool) {
 				selectedCombos[c.Name] = checked
-			})},
+			}),
+			"onclick": func(event *js.Object) {
+				// Don't propagate to the container, because that will just call click on us again.
+				// TODO: js.Object and Call() are ugly.
+				event.Call("stopPropagation")
+			}},
 		),
 		m("br", nil),
 		moria.F(func(children *[]moria.View) {
@@ -162,7 +167,7 @@ var List = []Combo{
 	{"4", FromNames("1", "2", "3", "2")},
 	{"5", FromNames("1", "2", "5", "2", "3")},
 	{"3U", FromNames("1", "2", "3", "6")},
-	{"4U", FromNames("1", "2", "3", "4","5")},
+	{"4U", FromNames("1", "2", "3", "4", "5")},
 	{"HCH", FromNames("3", "2", "3")},
 	{"CHC", FromNames("2", "3", "2")},
 	{"Liver go-around", FromNames("V", "4B", "3B", "S")},
