@@ -187,9 +187,9 @@ func (c Combo) WithExtender() Combo {
 		}
 	} else {
 		if lastMove.IsLeadSide {
-			extender = Combo{"Y", FromNames("2", "3", "RK")}
+			extender = ByName("x")
 		} else {
-			extender = Combo{"Y", FromNames("RK", "3", "2", "LK")}
+			extender = ByName("y")
 		}
 	}
 
@@ -212,7 +212,10 @@ var List = []Combo{
 	{"A", FromNames("1B", "2", "3")},
 	{"B", FromNames("2B", "3", "2")},
 	{"X", FromNames("LK", "2", "3", "RK")},
-	{"Y", FromNames("RK", "3", "2", "LK")},
+	// X without the first kick
+	{"x", FromNames("2", "3", "RK")},
+	// Y without the first kick
+	{"y", FromNames("3", "2", "LK")},
 }
 
 type Round struct {
@@ -252,7 +255,6 @@ func (r Round) CombosAsString() string {
 	return strings.Join(combos, ",")
 
 }
-
 
 // TODO: Before adding more rounds to this, move this out to a configuration file, or at least a better format.
 var RoundList = []Round{
