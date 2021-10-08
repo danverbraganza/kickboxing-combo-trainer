@@ -252,8 +252,9 @@ func (r Round) CombosAsString() string {
 
 }
 
-var RoundList = []Round{
 
+// TODO: Before adding more rounds to this, move this out to a configuration file, or at least a better format.
+var RoundList = []Round{
 	{"Getting Started", []Combo{ByName("1"), ByName("1-1"), ByName("2")}},
 	{"Adding the hook", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3")}},
 	{"Adding the hook II", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC")}},
