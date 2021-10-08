@@ -55,7 +55,7 @@ func (*WelcomePage) View(x moria.Controller) moria.View {
 	w := x.(*WelcomePage)
 
 	return m("div#wrapper", nil,
-		m("div#subtitle", nil, moria.S("You can pick a prebuilt round from below or build a custom round by picking individual combos. You can then modify the duration and intensity of the round.")),
+		m("div#subtitle", nil, moria.S("Drill rounds of randomized combos to improve your timing and movement. Rounds are categorised by the types of moves they include so you can customize the level of complexity, intensity and duration.")),
 		// Add more components here
 		m("div", nil,
 			m("div#options", nil,
