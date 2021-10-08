@@ -136,14 +136,12 @@ func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.Virtu
 		for {
 			select {
 			case <-beatTick:
-				print("Read on beatTick")
 				moveIndex++
 				if moveIndex < 0 {
 					// Do nothing
 				} else if moveIndex < len(c.Moves) {
 					current = DisplayElement{Type: "move", Move: c.Moves[moveIndex].LongName}
 				} else {
-					print("closing displayChan")
 					close(displayChan)
 					return
 				}
@@ -207,8 +205,8 @@ var List = []Combo{
 	{"4U", FromNames("1", "2", "3", "4", "5")},
 	{"HCH", FromNames("3", "2", "3")},
 	{"CHC", FromNames("2", "3", "2")},
-	{"Liver go-around", FromNames("V", "4B", "3B", "S")},
-	{"Spleen go-around", FromNames("S", "3B", "4B", "V")},
+	{"Liver goaround", FromNames("V", "4B", "3B", "S")},
+	{"Spleen goaround", FromNames("S", "3B", "4B", "V")},
 	{"A", FromNames("1B", "2", "3")},
 	{"B", FromNames("2B", "3", "2")},
 	{"LK", FromNames("LK")},
@@ -270,15 +268,15 @@ var RoundList = []Round{
 	{"Adding the hook II", "This round adds a new combo variation that alternates between the hook and the cross for a devastating barrage.", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC")}},
 	{"Adding the hook III", "Get comfortable with throwing the hook/cross combo after a number of different setups", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC"), Join(ByName("1"), ByName("CHC")), Join(ByName("2"), ByName("HCH")), Join(ByName("3"), ByName("CHC"))}},
 	{"Uppercuts", "Introducing the uppercuts to our repertoire.", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("3U"), ByName("4U")}},
-	{"Intro to Body Shots", "This round challenges you to change levels to look for gaps in your opponents defences.", []Combo{ByName("1"), ByName("2"), ByName("A"), ByName("B"), ByName("Liver go-around"), ByName("Spleen go-around")}},
+	{"Intro to Body Shots", "This round challenges you to change levels to look for gaps in your opponents defences.", []Combo{ByName("1"), ByName("2"), ByName("A"), ByName("B"), ByName("Liver goaround"), ByName("Spleen goaround")}},
 
-	{"Max hands", "Lets put together all the punches we've learned so far", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC"), Join(ByName("1"), ByName("CHC")), Join(ByName("2"), ByName("HCH")), Join(ByName("3"), ByName("CHC")), ByName("4"), ByName("Liver go-around"), ByName("Spleen go-around")}},
+	{"Max hands", "Lets put together all the punches we've learned so far", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC"), Join(ByName("1"), ByName("CHC")), Join(ByName("2"), ByName("HCH")), Join(ByName("3"), ByName("CHC")), ByName("4"), ByName("Liver goaround"), ByName("Spleen goaround")}},
 
 	{"Intro to Kicking", "We introduce kicking to our combos by chaining the kick on the opposite side of our body to a basic punching combo. You can use any kick for these combos.", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick()}},
 	{"Hooks and Kicks", "Working hooks and kicks at the same time", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick(), ByName("3").WithKick(), ByName("HCH").WithKick(), ByName("CHC").WithKick()}},
 	{"Uppercuts and Kicks", "Putting uppercuts and kicks together", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick(), ByName("3").WithKick(), ByName("4").WithKick(), ByName("3U").WithKick(), ByName("4U").WithKick()}},
 	{"Multi-kicking combos", "This round introduces combos X and Y, which include more than one kick in them", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick(), ByName("3").WithKick(), ByName("4").WithKick(), ByName("5").WithKick(), ByName("X"), ByName("Y")}},
-	{"Extended Combos", "Let's take the combos we know and work on extending the pattern with kicks and punches. You're building a fluidity with your attacks.", []Combo{ByName("1").WithExtender(), ByName("1-1").WithExtender(), ByName("2").WithExtender(), ByName("3").WithExtender(), ByName("HCH").WithExtender(), ByName("CHC").WithExtender(), Join(ByName("1"), ByName("CHC")).WithExtender(), Join(ByName("2"), ByName("HCH")).WithExtender(), Join(ByName("3"), ByName("CHC")).WithExtender(), ByName("4").WithExtender(), ByName("Liver go-around").WithExtender(), ByName("Spleen go-around").WithExtender(), ByName("A").WithExtender(), ByName("B").WithExtender()}},
+	{"Extended Combos", "Let's take the combos we know and work on extending the pattern with kicks and punches. You're building a fluidity with your attacks.", []Combo{ByName("1").WithExtender(), ByName("1-1").WithExtender(), ByName("2").WithExtender(), ByName("3").WithExtender(), ByName("HCH").WithExtender(), ByName("CHC").WithExtender(), Join(ByName("1"), ByName("CHC")).WithExtender(), Join(ByName("2"), ByName("HCH")).WithExtender(), Join(ByName("3"), ByName("CHC")).WithExtender(), ByName("4").WithExtender(), ByName("Liver goaround").WithExtender(), ByName("Spleen goaround").WithExtender(), ByName("A").WithExtender(), ByName("B").WithExtender()}},
 }
 
 // TODO: Dictionary lookup

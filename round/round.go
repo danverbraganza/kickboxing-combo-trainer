@@ -42,10 +42,12 @@ var (
 
 func ExtractCombos(rawComboString string) (sc []combos.Combo) {
 	comboKeys := strings.Split(rawComboString, ",")
+	print(comboKeys)
 	for _, comboKey := range comboKeys {
 		comboNames := strings.Split(comboKey, "-")
 		individualCombos := []combos.Combo{}
 		for _, comboName := range comboNames {
+			print(comboName)
 			individualCombos = append(individualCombos, combos.ByName(comboName))
 		}
 		sc = append(sc, combos.Join(individualCombos...))
@@ -79,7 +81,6 @@ func NewRound() *Round {
 		SelectedCombos: []combos.Combo{},
 	}
 	go func() {
-		counter := r.counter
 		// block here for the beattick to prevent calling randomCombo
 		// with the wrong combo.
 		<-runningBeatTick
@@ -88,12 +89,9 @@ func NewRound() *Round {
 			// Pick a combo
 			comboTimer := r.RandomCombo().NewChannel(runningBeatTick)
 			for innerElement := range comboTimer {
-				print("Writing to display", counter)
 				DisplayChan <- innerElement
 			}
-			print("next move")
 		}
-		print("R cleared")
 	}()
 	return &r
 }
@@ -188,7 +186,6 @@ func (*Round) View(x moria.Controller) moria.View {
 		m("button#stop.control", js.M{
 			"config": mithril.RouteConfig,
 			"onclick": func() {
-				print("Stopping")
 				go r.Stop()
 			},
 		},
