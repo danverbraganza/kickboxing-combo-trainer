@@ -43,7 +43,12 @@ var (
 func ExtractCombos(rawComboString string) (sc []combos.Combo) {
 	comboKeys := strings.Split(rawComboString, ",")
 	for _, comboKey := range comboKeys {
-		sc = append(sc, combos.ByName(comboKey))
+		comboNames := strings.Split(comboKey, "-")
+		individualCombos := []combos.Combo{}
+		for _, comboName := range comboNames {
+			individualCombos = append(individualCombos, combos.ByName(comboName))
+		}
+		sc = append(sc, combos.Join(individualCombos...))
 	}
 	return
 }

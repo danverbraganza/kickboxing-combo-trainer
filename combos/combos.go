@@ -74,7 +74,8 @@ func (c Combo) NewCheckBox(selectedCombos map[string]bool) (retval moria.Virtual
 				selectedCombos[c.Name] = checked
 			}),
 			"onclick": func(event *js.Object) {
-				// Don't propagate to the container, because that will just call click on us again.
+				// Don't propagate to the container, because
+				// that will just call click on us again.
 				// TODO: js.Object and Call() are ugly.
 				event.Call("stopPropagation")
 			}},
@@ -100,7 +101,7 @@ func Join(combos ...Combo) (retval Combo) {
 			retval.Moves = append(retval.Moves, move)
 		}
 	}
-	retval.Name = strings.Join(names, "+")
+	retval.Name = strings.Join(names, "-")
 	return
 }
 
