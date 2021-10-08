@@ -168,9 +168,9 @@ func (c Combo) WithKick() Combo {
 		return c
 	}
 
-	KickToThrow := Combo{"RK", FromNames("LK")}
+	KickToThrow := ByName("LK")
 	if lastMove.IsLeadSide {
-		KickToThrow = Combo{"RK", FromNames("RK")}
+		KickToThrow = ByName("RK")
 	}
 	return Join(c, KickToThrow)
 }
@@ -211,7 +211,10 @@ var List = []Combo{
 	{"Spleen go-around", FromNames("S", "3B", "4B", "V")},
 	{"A", FromNames("1B", "2", "3")},
 	{"B", FromNames("2B", "3", "2")},
+	{"LK", FromNames("LK")},
+	{"RK", FromNames("RK")},
 	{"X", FromNames("LK", "2", "3", "RK")},
+	{"Y", FromNames("RK", "3", "2", "LK")},
 	// X without the first kick
 	{"x", FromNames("2", "3", "RK")},
 	// Y without the first kick
