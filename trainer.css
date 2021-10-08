@@ -169,15 +169,21 @@ input {
     padding: 8px;
     margin: 8px;
     border-radius: 4px;
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+}
+
+.round-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-span .round-description {
-    margin: 10px;
+span.round-description {
+    margin: 10px 10px 0px 0px;
     font-style: italic;
-
 }
 
 

@@ -244,12 +244,13 @@ func (r Round) NewRadioButton(selectedRound *string) (retval moria.VirtualElemen
 		),
 		m("span.round-description", nil, moria.S(r.Description)),
 		m("br", nil),
+		m("div.round-container", nil,
 		moria.F(func(children *[]moria.View) {
 			for _, combo := range r.Combos {
 				*children = append(*children, combo.Describe())
 			}
 			return
-		}))
+		})))
 }
 
 // Returns a stringified list of the combos.
