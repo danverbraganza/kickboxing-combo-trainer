@@ -148,6 +148,7 @@ func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.Virtu
 				}
 			default:
 				if !current.Loaded {
+
 					current.Loaded = true
 					displayChan <- m("div#combo", nil, moria.S("-"))
 				} else {
@@ -157,6 +158,41 @@ func (c Combo) NewChannel(beatTick chan time.Time) (displayChan chan moria.Virtu
 		}
 	}()
 	return displayChan
+}
+
+// WithKick finishes the combo off with the opposite side kick
+func (c Combo) WithKick() Combo {
+	lastMove := c.Moves[len(c.Moves)-1]
+	if lastMove.IsKick() {
+		return c
+	}
+
+	KickToThrow := Combo{"RK", FromNames("LK")}
+	if lastMove.IsLeadSide {
+		KickToThrow = Combo{"RK", FromNames("RK")}
+	}
+	return Join(c, KickToThrow)
+}
+
+// WithExtender finishes the combo off with X or Y.
+func (c Combo) WithExtender() Combo {
+	var extender Combo
+	lastMove := c.Moves[len(c.Moves)-1]
+	if !lastMove.IsKick() {
+		if lastMove.IsLeadSide {
+			extender = ByName("Y")
+		} else {
+			extender = ByName("X")
+		}
+	} else {
+		if lastMove.IsLeadSide {
+			extender = Combo{"Y", FromNames("2", "3", "RK")}
+		} else {
+			extender = Combo{"Y", FromNames("RK", "3", "2", "LK")}
+		}
+	}
+
+	return Join(c, extender)
 }
 
 var List = []Combo{
@@ -217,12 +253,22 @@ func (r Round) CombosAsString() string {
 }
 
 var RoundList = []Round{
+
 	{"Getting Started", []Combo{ByName("1"), ByName("1-1"), ByName("2")}},
 	{"Adding the hook", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3")}},
 	{"Adding the hook II", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC")}},
 	{"Adding the hook III", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC"), Join(ByName("1"), ByName("CHC")), Join(ByName("2"), ByName("HCH")), Join(ByName("3"), ByName("CHC"))}},
-	{"Uppercut FTW", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("3U"), ByName("4U")}},
-	{"Max hands", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("Liver go-around"), ByName("Spleen go-around")}},
+	{"Uppercuts", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("4"), ByName("3U"), ByName("4U")}},
+	{"Intro to Body Shots", []Combo{ByName("1"), ByName("2"), ByName("A"), ByName("B"), ByName("Liver go-around"), ByName("Spleen go-around")}},
+
+	{"Max hands", []Combo{ByName("1"), ByName("1-1"), ByName("2"), ByName("3"), ByName("HCH"), ByName("CHC"), Join(ByName("1"), ByName("CHC")), Join(ByName("2"), ByName("HCH")), Join(ByName("3"), ByName("CHC")), ByName("4"), ByName("Liver go-around"), ByName("Spleen go-around")}},
+
+	{"Intro to Kicking", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick()}},
+	{"Multi-kicking combos", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick(), ByName("3").WithKick(), ByName("4").WithKick(), ByName("5").WithKick(), ByName("X"), ByName("Y")}},
+	{"Hooks and Kicks", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick(), ByName("3").WithKick(), ByName("HCH").WithKick(), ByName("CHC").WithKick()}},
+	{"Uppercuts and Kicks", []Combo{ByName("1").WithKick(), ByName("1-1").WithKick(), ByName("2").WithKick(), ByName("3").WithKick(), ByName("4").WithKick(), ByName("3U").WithKick(), ByName("4U").WithKick()}},
+
+	{"Extended Combos", []Combo{ByName("1").WithExtender(), ByName("1-1").WithExtender(), ByName("2").WithExtender(), ByName("3").WithExtender(), ByName("HCH").WithExtender(), ByName("CHC").WithExtender(), Join(ByName("1"), ByName("CHC")).WithExtender(), Join(ByName("2"), ByName("HCH")).WithExtender(), Join(ByName("3"), ByName("CHC")).WithExtender(), ByName("4").WithExtender(), ByName("Liver go-around").WithExtender(), ByName("Spleen go-around").WithExtender()}},
 }
 
 // TODO: Dictionary lookup
