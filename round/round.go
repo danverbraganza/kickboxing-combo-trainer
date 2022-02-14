@@ -12,7 +12,7 @@ import (
 	"github.com/danverbraganza/go-mithril/moria"
 	"github.com/gopherjs/gopherjs/js"
 
-	"kickboxing-combo-trainer/combos"
+	"github.com/danverbraganza/kickboxing-combo-trainer/combos"
 )
 
 func Init() {

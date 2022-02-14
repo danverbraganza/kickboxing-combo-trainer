@@ -4,8 +4,8 @@ import (
 	"github.com/danverbraganza/go-mithril/moria"
 	"honnef.co/go/js/dom"
 
-	"kickboxing-combo-trainer/round"
-	"kickboxing-combo-trainer/welcome"
+	"github.com/danverbraganza/kickboxing-combo-trainer/round"
+	"github.com/danverbraganza/kickboxing-combo-trainer/welcome"
 )
 
 var m = moria.M

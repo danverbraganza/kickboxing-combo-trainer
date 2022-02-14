@@ -9,7 +9,7 @@ import (
 	"github.com/gopherjs/gopherjs/js"
 	"honnef.co/go/js/dom"
 
-	"kickboxing-combo-trainer/combos"
+	"github.com/danverbraganza/kickboxing-combo-trainer/combos"
 )
 
 var m = moria.M
